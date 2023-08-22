@@ -4,17 +4,24 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Pressable, useColorScheme } from 'react-native';
 import chair from "./chair.png";
 import mop from "./mop.png";
-import pic from "../../../assets/images/pic.jpg"
 
 import { icons, SIZES, FONT } from '../../../constants';
+import { useNavigation } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 
-const Popularjobs = () => {
+
+
+const Popularjobs = ({ currProfilePic }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [buttonOnePressed, setButtonOnePressed] = useState(false);
   const [buttonTwoPressed, setButtonTwoPressed] = useState(false);
   const [selectedButtons, setSelectedButtons] = useState([]);
   const [showPlusIcon, setShowPlusIcon] = useState(true);
   const [timerSeconds, setTimerSeconds] = useState(10);
+  const [profilePic, setProfilePic] = useState(null);
+  const [claimedProfilePic, setClaimedProfilePic] = useState(null); // New state
+  
+  const route = useRoute();
 
   useEffect(() => {
     if (timerSeconds > 0 && !isModalVisible) {
@@ -29,6 +36,7 @@ const Popularjobs = () => {
       setButtonTwoPressed(false);
       setSelectedButtons([]);
     }
+    
   }, [timerSeconds, isModalVisible]);
   
   const toggleModal = () => {
@@ -51,6 +59,7 @@ const Popularjobs = () => {
     const selected = [];
     if (buttonOnePressed) {
       selected.push('Button One');
+      setClaimedProfilePic(currProfilePic); // Sto
     }
     if (buttonTwoPressed) {
       selected.push('Button Two');
@@ -61,6 +70,7 @@ const Popularjobs = () => {
     setButtonOnePressed(false);
     setButtonTwoPressed(false);
   };
+  // console.log("Popularjobs.jsx:", currProfilePic);
 
   return (
     <View style={styles.container}>
@@ -127,7 +137,7 @@ const Popularjobs = () => {
           </TouchableOpacity>
         </View>
       </Modal>
-
+{/* Claimed Picture */}
       <View style={styles.buttonStyles}>
         {selectedButtons.includes('Button One') && (
           <Pressable onPress={handleButtonOnePress}> 
@@ -144,7 +154,7 @@ const Popularjobs = () => {
                 />
               </View>
               {buttonOnePressed && <Image 
-                source={pic} 
+                source={claimedProfilePic || require('../../../assets/images/emptypfp.png')}
                 style={styles.pictwo}
               />}
           </Pressable>
@@ -164,7 +174,7 @@ const Popularjobs = () => {
                 />
               </View>
               {buttonTwoPressed && <Image 
-                source={pic} 
+                source={claimedProfilePic || require('../../../assets/images/emptypfp.png')}
                 style={styles.pic}
               />}
           </Pressable>
